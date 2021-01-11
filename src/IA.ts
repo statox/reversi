@@ -11,6 +11,11 @@ export default class IA {
     }
 
     play() {
+        const bestMove = this.chooseBestMove(this.playerID);
+        this._game.placeDisk(bestMove);
+    }
+
+    chooseBestMove(player) {
         let bestMove;
         let bestMoveScore = 0;
 
@@ -26,6 +31,6 @@ export default class IA {
             }
         }
 
-        this._game.placeDisk(bestMove);
+        return bestMove;
     }
 }
