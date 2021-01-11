@@ -30,4 +30,4 @@ var e,t=arguments[3],n=require("buffer").Buffer,a=require("process");!function(n
 },{}],"YSF2":[function(require,module,exports) {
 "use strict";var e=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});var r=e(require("p5"));require("./styles.scss");var t=e(require("./Game")),u=e(require("./IA")),a=function(e){var r,a,s=!0;e.setup=function(){e.createCanvas(800,800).parent("app"),r=new t.default(e),a=new u.default(2,r)},e.draw=function(){e.background(30,200,30),r.draw()},e.mousePressed=function(){if(s){var t=r.board.xyToIJ({x:e.mouseX,y:e.mouseY});r.placeDisk(t)&&(s=!1,setTimeout(function(){s=!0,a.play()},1e3))}}};new r.default(a);
 },{"p5":"rnl4","./styles.scss":"aiJW","./Game":"LMN3","./IA":"rtQv"}]},{},["YSF2"], null)
-//# sourceMappingURL=/app.0c5b122f.js.map
+//# sourceMappingURL=reversi/app.0c5b122f.js.map
