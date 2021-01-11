@@ -4,7 +4,6 @@ import './styles.scss';
 import Game from './Game';
 import IA from './IA';
 
-// Creating the sketch itself
 const sketch = (p5: P5) => {
     let game: Game;
     let ia: IA;

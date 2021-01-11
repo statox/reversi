@@ -1,4 +1,4 @@
-# P5 + typescript boilerplate
+# Reversi
 
 For some reason it doesn't work with `npm` but works fine with `yarn`.
 
