@@ -267,4 +267,10 @@ export class Board {
 
         return openCells.filter((c) => this.getCellsToFlip(player, c).length > 0);
     }
+
+    isTerminal() {
+        if (this.findOpenCells(1).length === 0 && this.findOpenCells(2).length === 0) {
+            return true;
+        }
+    }
 }

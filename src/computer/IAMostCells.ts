@@ -13,6 +13,9 @@ export class IAMostCells extends IA {
         let bestMoveScore = 0;
 
         const possibleCells = this._game.board.findOpenCells(player);
+        if (!possibleCells.length) {
+            return;
+        }
         for (let cell of possibleCells) {
             const cellsToFlip = this._game.board.getCellsToFlip(this.playerID, cell);
             if (cellsToFlip.length > bestMoveScore) {

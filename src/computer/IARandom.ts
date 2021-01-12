@@ -10,6 +10,9 @@ export class IARandom extends IA {
 
     chooseMove = (player) => {
         const possibleCells = this._game.board.findOpenCells(player);
+        if (!possibleCells.length) {
+            return;
+        }
         const randIndex = Math.ceil(Math.random() * possibleCells.length - 1);
         const chosenCell = possibleCells[randIndex];
         return {i: chosenCell.boardPos.x, j: chosenCell.boardPos.y};
