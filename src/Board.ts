@@ -217,4 +217,54 @@ export default class Board {
 
         return cellsToFlip;
     }
+
+    findOpenCells(player: PlayerID) {
+        const stack: Cell[] = [];
+        const openCells = [];
+        const visited = new Set();
+        stack.push(this.cells[Math.ceil(this.D / 2)][Math.ceil(this.D / 2)]);
+
+        while (stack.length) {
+            const currentCell = stack.pop();
+
+            if (visited.has(currentCell)) {
+                continue;
+            }
+            visited.add(currentCell);
+
+            if (currentCell.value === undefined) {
+                openCells.push(currentCell);
+                continue;
+            }
+
+            const {x, y} = currentCell.boardPos;
+
+            if (x > 0) {
+                if (y > 0) {
+                    stack.push(this.cells[y - 1][x - 1]);
+                }
+                stack.push(this.cells[y][x - 1]);
+                if (y < this.D - 1) {
+                    stack.push(this.cells[y + 1][x - 1]);
+                }
+            }
+            if (y > 0) {
+                stack.push(this.cells[y - 1][x]);
+            }
+            if (y < this.D - 1) {
+                stack.push(this.cells[y + 1][x]);
+            }
+            if (x < this.D - 1) {
+                if (y > 0) {
+                    stack.push(this.cells[y - 1][x + 1]);
+                }
+                stack.push(this.cells[y][x + 1]);
+                if (y < this.D - 1) {
+                    stack.push(this.cells[y + 1][x + 1]);
+                }
+            }
+        }
+
+        return openCells.filter((c) => this.getCellsToFlip(player, c).length > 0);
+    }
 }

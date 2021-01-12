@@ -3,7 +3,9 @@ import 'p5/lib/addons/p5.dom';
 import './styles.scss';
 
 import Game from './Game';
-import IA from './IA';
+import IA from './computer/IA';
+import IARandom from './computer/IARandom';
+import IAMostCells from './computer/IAMostCells';
 
 const sketch = (p5: P5) => {
     let game: Game;
@@ -22,7 +24,7 @@ const sketch = (p5: P5) => {
             setTimeout(() => {
                 playerCanClick = true;
                 ia.play();
-                const openCells = ia.findOpenCells(1, game.board);
+                const openCells = game.board.findOpenCells(1);
                 game.board.setOpenCells(openCells);
             }, 1000);
         }
@@ -44,11 +46,11 @@ const sketch = (p5: P5) => {
         canvas.parent('app');
 
         game = new Game(p5);
-        ia = new IA(2, game);
-        iaPlayer = new IA(1, game);
+        ia = new IAMostCells(2, game);
+        iaPlayer = new IAMostCells(1, game);
 
         // Initialize the cells the player can choose
-        const openCells = ia.findOpenCells(1, game.board);
+        const openCells = game.board.findOpenCells(1);
         game.board.setOpenCells(openCells);
 
         autoPlayBtn = p5.createButton('Choose best move');
@@ -77,7 +79,7 @@ const sketch = (p5: P5) => {
             setTimeout(() => {
                 playerCanClick = true;
                 ia.play();
-                const openCells = ia.findOpenCells(1, game.board);
+                const openCells = game.board.findOpenCells(1);
                 game.board.setOpenCells(openCells);
             }, 1000);
         }
