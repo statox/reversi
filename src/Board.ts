@@ -8,6 +8,7 @@ export default class Board {
     cells: Cell[][]; // TODO: Strong typing
     lastPlayed: Cell | undefined;
     lastFailed: Cell | undefined;
+    openCells: Cell[];
 
     constructor(p5: P5) {
         this.p5 = p5;
@@ -25,6 +26,8 @@ export default class Board {
         this.cells[3][4].value = 2;
         this.cells[4][3].value = 2;
         this.cells[4][4].value = 1;
+
+        this.openCells = [];
     }
 
     draw() {
@@ -41,6 +44,8 @@ export default class Board {
                     p5.fill(0, 50, 0);
                 } else if (this.lastFailed && this.lastFailed.boardPos.x === i && this.lastFailed.boardPos.y === j) {
                     p5.fill(50, 0, 0);
+                } else if (this.openCells.some((c) => c.boardPos.x === i && c.boardPos.y === j)) {
+                    p5.fill('rgba(100, 100, 200, 0.1)');
                 } else {
                     p5.fill(0, 150, 0);
                 }
@@ -89,6 +94,10 @@ export default class Board {
     setFailedPlay(c: Cell) {
         this.lastFailed = c;
         setTimeout(() => (this.lastFailed = undefined), 500);
+    }
+
+    setOpenCells(cs: Cell[]) {
+        this.openCells = cs;
     }
 
     getCellsToFlip(player: PlayerID, cell?: Cell) {

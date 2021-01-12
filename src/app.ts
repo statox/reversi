@@ -17,6 +17,10 @@ const sketch = (p5: P5) => {
 
         game = new Game(p5);
         ia = new IA(2, game);
+
+        // Initialize the cells the player can choose
+        const openCells = ia.findOpenCells(1, game.board);
+        game.board.setOpenCells(openCells);
     };
 
     // The sketch draw method
@@ -26,15 +30,20 @@ const sketch = (p5: P5) => {
     };
 
     p5.mousePressed = () => {
+        // Don't allow the player to play if the computer is playing
         if (!playerCanClick) {
             return;
         }
         const coord = game.board.xyToIJ({x: p5.mouseX, y: p5.mouseY});
+        // If the player chose a valid position
+        // let the computer play and update the cells player can play
         if (game.placeDisk(coord)) {
             playerCanClick = false;
             setTimeout(() => {
                 playerCanClick = true;
                 ia.play();
+                const openCells = ia.findOpenCells(1, game.board);
+                game.board.setOpenCells(openCells);
             }, 1000);
         }
     };
