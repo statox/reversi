@@ -3,15 +3,13 @@ import {Cell} from './Cell';
 import PlayerID from '../Player';
 
 export class Board {
-    p5: P5;
     D: number;
     cells: Cell[][]; // TODO: Strong typing
     lastPlayed: Cell | undefined;
     lastFailed: Cell | undefined;
     openCells: Cell[];
 
-    constructor(p5: P5, cells?: Cell[][]) {
-        this.p5 = p5;
+    constructor(cells?: Cell[][]) {
         this.D = 8;
 
         this.cells = [];
@@ -20,7 +18,10 @@ export class Board {
             for (let j = 0; j < this.D; j++) {
                 this.cells.push([]);
                 for (let i = 0; i < this.D; i++) {
-                    this.cells[j].push(new Cell(this.p5, p5.createVector(i, j), undefined));
+                    const pos = new P5.Vector();
+                    pos.x = i;
+                    pos.y = j;
+                    this.cells[j].push(new Cell(pos, undefined));
                 }
             }
 
@@ -32,7 +33,10 @@ export class Board {
             for (let j = 0; j < this.D; j++) {
                 this.cells.push([]);
                 for (let i = 0; i < this.D; i++) {
-                    this.cells[j].push(new Cell(this.p5, p5.createVector(i, j), cells[j][i].value));
+                    const pos = new P5.Vector();
+                    pos.x = i;
+                    pos.y = j;
+                    this.cells[j].push(new Cell(pos, cells[j][i].value));
                 }
             }
         }
@@ -40,8 +44,7 @@ export class Board {
         this.openCells = [];
     }
 
-    draw() {
-        const p5 = this.p5;
+    draw(p5: P5) {
         const d = Math.min(p5.width, p5.height) / this.D;
         for (let j = 0; j < this.D; j++) {
             const y = j * d;
@@ -62,14 +65,14 @@ export class Board {
                 p5.square(0, 0, d);
                 p5.pop();
 
-                this.cells[j][i].draw(d);
+                this.cells[j][i].draw(p5, d);
             }
         }
     }
 
-    xyToIJ(coord: {x: number; y: number}) {
+    xyToIJ(p5: P5, coord: {x: number; y: number}) {
         const {x, y} = coord;
-        const d = Math.min(this.p5.width, this.p5.height) / this.D;
+        const d = Math.min(p5.width, p5.height) / this.D;
         const i = Math.floor(x / d);
         const j = Math.floor(y / d);
         if (i >= 0 && j >= 0 && i < this.D && j < this.D) {

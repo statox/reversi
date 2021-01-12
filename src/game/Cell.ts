@@ -2,12 +2,10 @@ import P5 from 'p5';
 import PlayerID from '../Player';
 
 export class Cell {
-    p5: P5;
     value: undefined | PlayerID;
     boardPos: P5.Vector;
 
-    constructor(p5, pos, value?) {
-        this.p5 = p5;
+    constructor(pos, value?) {
         this.boardPos = pos;
         this.value = value;
     }
@@ -23,8 +21,7 @@ export class Cell {
         }
     }
 
-    draw(size: number) {
-        const p5 = this.p5;
+    draw(p5: P5, size: number) {
         if (this.value === undefined) {
             return;
         }

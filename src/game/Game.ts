@@ -11,7 +11,7 @@ export class Game {
 
     constructor(p5: P5) {
         this.p5 = p5;
-        this.board = new Board(p5);
+        this.board = new Board();
         this.currentPlayer = 1;
         this.updateScores();
         this.isOver = false;
@@ -65,7 +65,7 @@ export class Game {
     }
 
     draw() {
-        this.board.draw();
+        this.board.draw(this.p5);
         let scorePlayer = `Player: ${this.scores[1]}`;
         let scoreIA = `Computer: ${this.scores[2]}`;
         this.p5.fill(250);

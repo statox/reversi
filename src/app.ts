@@ -44,9 +44,9 @@ const sketch = (p5: P5) => {
         canvas.parent('app');
 
         game = new Game(p5);
-        ia = new IAMinMax(2, game);
-        // iaPlayer = new IAMostCells(1, game);
-        iaPlayer = new IAMinMax(1, game);
+        ia = new IAMinMax(2, game, 3);
+        iaPlayer = new IAMostCells(1, game);
+        // iaPlayer = new IAMinMax(1, game);
 
         // Initialize the cells the player can choose
         const openCells = game.board.findOpenCells(1);
@@ -70,7 +70,7 @@ const sketch = (p5: P5) => {
         if (!playerCanClick) {
             return;
         }
-        const coord = game.board.xyToIJ({x: p5.mouseX, y: p5.mouseY});
+        const coord = game.board.xyToIJ(p5, {x: p5.mouseX, y: p5.mouseY});
         // If the player chose a valid position
         // let the computer play and update the cells player can play
         if (game.placeDisk(coord)) {
