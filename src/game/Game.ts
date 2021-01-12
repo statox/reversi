@@ -32,7 +32,7 @@ export class Game {
                 if (this.board.findOpenCells(otherPlayer).length === 0) {
                     this.isOver = true;
                 } else {
-                    console.log('Playing again because blocked');
+                    // console.log('Playing again because blocked');
                     if (this.currentPlayer === 1) {
                         this.currentPlayer = 2;
                     } else {
