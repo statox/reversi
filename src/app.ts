@@ -12,14 +12,29 @@ const sketch = (p5: P5) => {
     let playerCanClick = true;
     let autoPlay: () => void;
     let autoPlayBtn: P5.Element;
+    let autoPlayFull: () => void;
+    let autoPlayFullBtn: P5.Element;
 
     autoPlay = () => {
+        if (playerCanClick && game.currentPlayer === 1) {
+            iaPlayer.play();
+            playerCanClick = false;
+            setTimeout(() => {
+                playerCanClick = true;
+                ia.play();
+                const openCells = ia.findOpenCells(1, game.board);
+                game.board.setOpenCells(openCells);
+            }, 1000);
+        }
+    };
+
+    autoPlayFull = () => {
         if (game.currentPlayer === 1) {
             iaPlayer.play();
         } else {
             ia.play();
         }
-        setTimeout(autoPlay, 100);
+        setTimeout(autoPlayFull, 100);
     };
 
     // The sketch setup method
@@ -36,8 +51,11 @@ const sketch = (p5: P5) => {
         const openCells = ia.findOpenCells(1, game.board);
         game.board.setOpenCells(openCells);
 
-        autoPlayBtn = p5.createButton('Autoplay');
+        autoPlayBtn = p5.createButton('Choose best move');
         autoPlayBtn.mousePressed(autoPlay);
+
+        autoPlayFullBtn = p5.createButton('Autoplay full');
+        autoPlayFullBtn.mousePressed(autoPlayFull);
     };
 
     // The sketch draw method
