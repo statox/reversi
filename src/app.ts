@@ -1,4 +1,5 @@
 import P5 from 'p5';
+import 'p5/lib/addons/p5.dom';
 import './styles.scss';
 
 import Game from './Game';
@@ -7,7 +8,19 @@ import IA from './IA';
 const sketch = (p5: P5) => {
     let game: Game;
     let ia: IA;
+    let iaPlayer: IA;
     let playerCanClick = true;
+    let autoPlay: () => void;
+    let autoPlayBtn: P5.Element;
+
+    autoPlay = () => {
+        if (game.currentPlayer === 1) {
+            iaPlayer.play();
+        } else {
+            ia.play();
+        }
+        setTimeout(autoPlay, 100);
+    };
 
     // The sketch setup method
     p5.setup = () => {
@@ -17,10 +30,14 @@ const sketch = (p5: P5) => {
 
         game = new Game(p5);
         ia = new IA(2, game);
+        iaPlayer = new IA(1, game);
 
         // Initialize the cells the player can choose
         const openCells = ia.findOpenCells(1, game.board);
         game.board.setOpenCells(openCells);
+
+        autoPlayBtn = p5.createButton('Autoplay');
+        autoPlayBtn.mousePressed(autoPlay);
     };
 
     // The sketch draw method

@@ -81,7 +81,6 @@ export default class IA {
         const possibleCells = this.findOpenCells(player, this._game.board);
         const randIndex = Math.ceil(Math.random() * possibleCells.length - 1);
         const chosenCell = possibleCells[randIndex];
-        console.log(possibleCells, randIndex, chosenCell);
         return {i: chosenCell.boardPos.x, j: chosenCell.boardPos.y};
     }
 
