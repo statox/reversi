@@ -1,7 +1,7 @@
 import P5 from 'p5';
-import PlayerID from './Player';
+import PlayerID from '../Player';
 
-export default class Cell {
+export class Cell {
     p5: P5;
     value: undefined | PlayerID;
     boardPos: P5.Vector;

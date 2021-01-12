@@ -2,10 +2,8 @@ import P5 from 'p5';
 import 'p5/lib/addons/p5.dom';
 import './styles.scss';
 
-import Game from './Game';
-import IA from './computer/IA';
-import IARandom from './computer/IARandom';
-import IAMostCells from './computer/IAMostCells';
+import {Game} from './game';
+import {IA, IARandom, IAMostCells} from './computer';
 
 const sketch = (p5: P5) => {
     let game: Game;

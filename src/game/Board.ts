@@ -1,8 +1,8 @@
 import P5 from 'p5';
-import Cell from './Cell';
-import PlayerID from './Player';
+import {Cell} from './Cell';
+import PlayerID from '../Player';
 
-export default class Board {
+export class Board {
     p5: P5;
     D: number;
     cells: Cell[][]; // TODO: Strong typing

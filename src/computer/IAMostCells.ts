@@ -1,8 +1,8 @@
 import PlayerID from '../Player';
-import Game from '../Game';
-import IA from './IA';
+import {Game} from '../game';
+import {IA} from './IA';
 
-export default class IAMostCells extends IA {
+export class IAMostCells extends IA {
     constructor(player: PlayerID, game: Game) {
         super(player, game);
         this.strategy = 'mostcells';

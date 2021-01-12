@@ -1,8 +1,8 @@
 import P5 from 'p5';
-import Board from './Board';
-import PlayerID from './Player';
+import {Board} from './Board';
+import PlayerID from '../Player';
 
-export default class Game {
+export class Game {
     p5: P5;
     board: Board;
     currentPlayer: PlayerID;

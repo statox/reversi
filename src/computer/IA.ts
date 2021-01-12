@@ -1,7 +1,7 @@
 import PlayerID from '../Player';
-import Game from '../Game';
+import {Game} from '../game';
 
-export default abstract class IA {
+export abstract class IA {
     playerID: PlayerID;
     readonly _game: Game;
     strategy: 'mostcells' | 'random';
