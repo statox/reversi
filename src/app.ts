@@ -4,8 +4,10 @@ import './styles.scss';
 
 import {Game} from './game';
 import {IA, IARandom, IAMostCells, IAMinMax} from './computer';
+import {P5Drawer} from './drawingUtils';
 
 const sketch = (p5: P5) => {
+    let p5Drawer: P5Drawer;
     let game: Game;
     let ia: IA;
     let iaPlayer: IA;
@@ -43,7 +45,9 @@ const sketch = (p5: P5) => {
         const canvas = p5.createCanvas(800, 800);
         canvas.parent('app');
 
-        game = new Game(p5);
+        p5Drawer = new P5Drawer(p5);
+
+        game = new Game();
         ia = new IAMinMax(2, game, 3);
         iaPlayer = new IAMostCells(1, game);
         // iaPlayer = new IAMinMax(1, game);
@@ -62,7 +66,7 @@ const sketch = (p5: P5) => {
     // The sketch draw method
     p5.draw = () => {
         p5.background(30, 200, 30);
-        game.draw();
+        p5Drawer.drawGame(game);
     };
 
     p5.mousePressed = () => {
@@ -70,7 +74,7 @@ const sketch = (p5: P5) => {
         if (!playerCanClick) {
             return;
         }
-        const coord = game.board.xyToIJ(p5, {x: p5.mouseX, y: p5.mouseY});
+        const coord = game.board.xyToIJ({width: p5.width, height: p5.height}, {x: p5.mouseX, y: p5.mouseY});
         // If the player chose a valid position
         // let the computer play and update the cells player can play
         if (game.placeDisk(coord)) {

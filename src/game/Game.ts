@@ -1,16 +1,13 @@
-import P5 from 'p5';
 import {Board} from './Board';
 import PlayerID from '../Player';
 
 export class Game {
-    p5: P5;
     board: Board;
     currentPlayer: PlayerID;
     scores: Object; // TODO Don't be lazy and type that properly
     isOver: boolean;
 
-    constructor(p5: P5) {
-        this.p5 = p5;
+    constructor() {
         this.board = new Board();
         this.currentPlayer = 1;
         this.updateScores();
@@ -62,22 +59,5 @@ export class Game {
                 }
             });
         });
-    }
-
-    draw() {
-        this.board.draw(this.p5);
-        let scorePlayer = `Player: ${this.scores[1]}`;
-        let scoreIA = `Computer: ${this.scores[2]}`;
-        this.p5.fill(250);
-        this.p5.stroke(0);
-        this.p5.textSize(20);
-        this.p5.text(scorePlayer, 10, 20);
-        this.p5.text(scoreIA, 10, 40);
-
-        if (this.isOver) {
-            const gameOverText = 'GAME OVER';
-            this.p5.textSize(40);
-            this.p5.text(gameOverText, this.p5.width / 2 - this.p5.textWidth(gameOverText) / 2, this.p5.height / 2);
-        }
     }
 }

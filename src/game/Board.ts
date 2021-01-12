@@ -1,4 +1,3 @@
-import P5 from 'p5';
 import {Cell} from './Cell';
 import PlayerID from '../Player';
 
@@ -18,10 +17,7 @@ export class Board {
             for (let j = 0; j < this.D; j++) {
                 this.cells.push([]);
                 for (let i = 0; i < this.D; i++) {
-                    const pos = new P5.Vector();
-                    pos.x = i;
-                    pos.y = j;
-                    this.cells[j].push(new Cell(pos, undefined));
+                    this.cells[j].push(new Cell({x: i, y: j}, undefined));
                 }
             }
 
@@ -33,10 +29,7 @@ export class Board {
             for (let j = 0; j < this.D; j++) {
                 this.cells.push([]);
                 for (let i = 0; i < this.D; i++) {
-                    const pos = new P5.Vector();
-                    pos.x = i;
-                    pos.y = j;
-                    this.cells[j].push(new Cell(pos, cells[j][i].value));
+                    this.cells[j].push(new Cell({x: i, y: j}, cells[j][i].value));
                 }
             }
         }
@@ -44,35 +37,10 @@ export class Board {
         this.openCells = [];
     }
 
-    draw(p5: P5) {
-        const d = Math.min(p5.width, p5.height) / this.D;
-        for (let j = 0; j < this.D; j++) {
-            const y = j * d;
-            for (let i = 0; i < this.D; i++) {
-                const x = i * d;
-                p5.push();
-                p5.translate(x, y);
-                p5.stroke(0);
-                if (this.lastPlayed && this.lastPlayed.boardPos.x === i && this.lastPlayed.boardPos.y === j) {
-                    p5.fill(0, 50, 0);
-                } else if (this.lastFailed && this.lastFailed.boardPos.x === i && this.lastFailed.boardPos.y === j) {
-                    p5.fill(50, 0, 0);
-                } else if (this.openCells.some((c) => c.boardPos.x === i && c.boardPos.y === j)) {
-                    p5.fill('rgba(100, 100, 200, 0.1)');
-                } else {
-                    p5.fill(0, 150, 0);
-                }
-                p5.square(0, 0, d);
-                p5.pop();
-
-                this.cells[j][i].draw(p5, d);
-            }
-        }
-    }
-
-    xyToIJ(p5: P5, coord: {x: number; y: number}) {
+    xyToIJ(dim: {width; height}, coord: {x: number; y: number}) {
         const {x, y} = coord;
-        const d = Math.min(p5.width, p5.height) / this.D;
+        const {width, height} = dim;
+        const d = Math.min(width, height) / this.D;
         const i = Math.floor(x / d);
         const j = Math.floor(y / d);
         if (i >= 0 && j >= 0 && i < this.D && j < this.D) {
