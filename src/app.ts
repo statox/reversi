@@ -3,7 +3,7 @@ import 'p5/lib/addons/p5.dom';
 import './styles.scss';
 
 import {Game} from './game';
-import {IA, IARandom, IAMostCells} from './computer';
+import {IA, IARandom, IAMostCells, IAMinMax} from './computer';
 
 const sketch = (p5: P5) => {
     let game: Game;
@@ -44,8 +44,9 @@ const sketch = (p5: P5) => {
         canvas.parent('app');
 
         game = new Game(p5);
-        ia = new IAMostCells(2, game);
-        iaPlayer = new IAMostCells(1, game);
+        ia = new IAMinMax(2, game);
+        // iaPlayer = new IAMostCells(1, game);
+        iaPlayer = new IAMinMax(1, game);
 
         // Initialize the cells the player can choose
         const openCells = game.board.findOpenCells(1);

@@ -10,22 +10,32 @@ export class Board {
     lastFailed: Cell | undefined;
     openCells: Cell[];
 
-    constructor(p5: P5) {
+    constructor(p5: P5, cells?: Cell[][]) {
         this.p5 = p5;
         this.D = 8;
 
         this.cells = [];
-        for (let j = 0; j < this.D; j++) {
-            this.cells.push([]);
-            for (let i = 0; i < this.D; i++) {
-                this.cells[j].push(new Cell(this.p5, p5.createVector(i, j), undefined));
+
+        if (!cells) {
+            for (let j = 0; j < this.D; j++) {
+                this.cells.push([]);
+                for (let i = 0; i < this.D; i++) {
+                    this.cells[j].push(new Cell(this.p5, p5.createVector(i, j), undefined));
+                }
+            }
+
+            this.cells[3][3].value = 1;
+            this.cells[3][4].value = 2;
+            this.cells[4][3].value = 2;
+            this.cells[4][4].value = 1;
+        } else {
+            for (let j = 0; j < this.D; j++) {
+                this.cells.push([]);
+                for (let i = 0; i < this.D; i++) {
+                    this.cells[j].push(new Cell(this.p5, p5.createVector(i, j), cells[j][i].value));
+                }
             }
         }
-
-        this.cells[3][3].value = 1;
-        this.cells[3][4].value = 2;
-        this.cells[4][3].value = 2;
-        this.cells[4][4].value = 1;
 
         this.openCells = [];
     }
@@ -66,6 +76,15 @@ export class Board {
             return {i, j};
         }
         return;
+    }
+
+    placeDiskWithCell(player: PlayerID, cell: Cell) {
+        if (!cell) {
+            return false;
+        }
+        const i = cell.boardPos.x;
+        const j = cell.boardPos.y;
+        return this.placeDisk(player, {i, j});
     }
 
     placeDisk(player: PlayerID, coord: {i: number; j: number}) {

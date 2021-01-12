@@ -4,7 +4,7 @@ import {Game} from '../game';
 export abstract class IA {
     playerID: PlayerID;
     readonly _game: Game;
-    strategy: 'mostcells' | 'random';
+    strategy: 'mostcells' | 'random' | 'minmax';
     abstract chooseMove: (PlayerID) => {i: number; j: number};
 
     constructor(player: PlayerID, game: Game) {
