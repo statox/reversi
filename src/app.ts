@@ -3,7 +3,7 @@ import 'p5/lib/addons/p5.dom';
 import './styles.scss';
 
 import {Game} from './game';
-import {IA, IARandom, IAMostCells, IAMinMax} from './computer';
+import {IA, IARandom, IAMostCells, IAMinMax, IAAlphaBeta} from './computer';
 import {P5Drawer} from './drawingUtils';
 
 const sketch = (p5: P5) => {
@@ -48,7 +48,7 @@ const sketch = (p5: P5) => {
         p5Drawer = new P5Drawer(p5);
 
         game = new Game();
-        ia = new IAMinMax(2, game, 3);
+        ia = new IAAlphaBeta(2, game);
         iaPlayer = new IAMostCells(1, game);
         // iaPlayer = new IAMinMax(1, game);
 

@@ -2,14 +2,14 @@ import PlayerID from '../Player';
 import {Game, Board} from '../game';
 import {IA} from './IA';
 
-export class IAMinMax extends IA {
+export class IAAlphaBeta extends IA {
     maxEvaluation: number;
     minEvaluation: number;
     maxDepth: number;
 
     constructor(player: PlayerID, game: Game, maxDepth?: number) {
         super(player, game);
-        this.strategy = 'minmax';
+        this.strategy = 'alphabeta';
         this.maxEvaluation = game.board.D * game.board.D + 1;
         this.minEvaluation = -this.maxEvaluation;
         this.maxDepth = maxDepth || 3;
@@ -29,7 +29,7 @@ export class IAMinMax extends IA {
             const childBoard = new Board(this._game.board.cells);
             childBoard.placeDisk(this.playerID, cell);
 
-            const moveScore = this.minmax(childBoard, this.maxDepth, true);
+            const moveScore = this.alphabeta(childBoard, this.maxDepth, this.minEvaluation, this.maxEvaluation, true);
             if (moveScore > bestMoveScore) {
                 bestMove = cell;
                 bestMoveScore = moveScore;
@@ -48,38 +48,43 @@ export class IAMinMax extends IA {
         return bestMove;
     };
 
-    minmax(board: Board, depth: number, maximizingPlayer: boolean) {
+    alphabeta(board: Board, depth: number, alpha: number, beta: number, maximizingPlayer: boolean) {
         this.nodesEvaluated += 1;
         if (depth === 0 || board.isTerminal()) {
             return this.evaluateBoard(board, this.playerID);
         }
 
         if (maximizingPlayer) {
-            let localMaxEvaluation = this.minEvaluation;
+            let v = this.minEvaluation;
             for (let move of board.findOpenCells(this.playerID)) {
                 // copy board and place disk in the copy
                 const childBoard = new Board(board.cells);
                 childBoard.placeDisk(this.playerID, move);
-                const childBoardEvaluation = this.minmax(childBoard, depth - 1, !maximizingPlayer);
-                if (childBoardEvaluation > localMaxEvaluation) {
-                    localMaxEvaluation = childBoardEvaluation;
+                const childBoardEvaluation = this.alphabeta(childBoard, depth - 1, alpha, beta, !maximizingPlayer);
+
+                v = Math.max(v, childBoardEvaluation);
+                if (v >= beta) {
+                    return v;
                 }
+                alpha = Math.max(alpha, v);
             }
-            return localMaxEvaluation;
+            return v;
         }
 
-        let localMinEvaluation = this.maxEvaluation;
-        const otherPlayer = this.playerID === 1 ? 2 : 1;
-        for (let move of board.findOpenCells(otherPlayer)) {
+        let v = this.maxEvaluation;
+        for (let move of board.findOpenCells(this.playerID)) {
             // copy board and place disk in the copy
             const childBoard = new Board(board.cells);
-            childBoard.placeDisk(otherPlayer, move);
-            const childBoardEvaluation = this.minmax(childBoard, depth - 1, !maximizingPlayer);
-            if (childBoardEvaluation < localMinEvaluation) {
-                localMinEvaluation = childBoardEvaluation;
+            childBoard.placeDisk(this.playerID, move);
+            const childBoardEvaluation = this.alphabeta(childBoard, depth - 1, alpha, beta, !maximizingPlayer);
+
+            v = Math.min(v, childBoardEvaluation);
+            if (alpha >= v) {
+                return v;
             }
+            beta = Math.min(beta, v);
         }
-        return localMinEvaluation;
+        return v;
     }
 
     evaluateBoard(board: Board, player: PlayerID) {
