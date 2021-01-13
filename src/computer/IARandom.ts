@@ -15,6 +15,6 @@ export class IARandom extends IA {
         }
         const randIndex = Math.ceil(Math.random() * possibleCells.length - 1);
         const chosenCell = possibleCells[randIndex];
-        return {i: chosenCell.boardPos.x, j: chosenCell.boardPos.y};
+        return chosenCell;
     };
 }

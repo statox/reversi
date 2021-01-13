@@ -1,4 +1,5 @@
 import P5 from 'p5';
+import {BoardCoord} from '../Coord';
 import {Board, Cell, Game} from '../game';
 
 export class P5Drawer {
@@ -8,18 +9,18 @@ export class P5Drawer {
         this.p5 = p5;
     }
 
-    drawCell(cell: Cell, size: number) {
+    drawCell(value: number, boardPos: BoardCoord, size: number) {
         const p5 = this.p5;
-        if (cell.value === undefined) {
+        if (value === undefined) {
             return;
         }
 
         p5.push();
-        const y = cell.boardPos.y * size;
-        const x = cell.boardPos.x * size;
+        const y = boardPos.j * size;
+        const x = boardPos.i * size;
 
         p5.translate(x, y);
-        if (cell.value === 1) {
+        if (value === 1) {
             p5.fill(0);
         } else {
             p5.fill(250);
@@ -39,11 +40,11 @@ export class P5Drawer {
                 p5.push();
                 p5.translate(x, y);
                 p5.stroke(0);
-                if (board.lastPlayed && board.lastPlayed.boardPos.x === i && board.lastPlayed.boardPos.y === j) {
+                if (board.lastPlayed && board.lastPlayed.i === i && board.lastPlayed.j === j) {
                     p5.fill(0, 50, 0);
-                } else if (board.lastFailed && board.lastFailed.boardPos.x === i && board.lastFailed.boardPos.y === j) {
+                } else if (board.lastFailed && board.lastFailed.i === i && board.lastFailed.j === j) {
                     p5.fill(50, 0, 0);
-                } else if (board.openCells.some((c) => c.boardPos.x === i && c.boardPos.y === j)) {
+                } else if (board.openCells.some((c) => c.i === i && c.j === j)) {
                     p5.fill('rgba(100, 100, 200, 0.1)');
                 } else {
                     p5.fill(0, 150, 0);
@@ -51,7 +52,7 @@ export class P5Drawer {
                 p5.square(0, 0, d);
                 p5.pop();
 
-                this.drawCell(board.cells[j][i], d);
+                this.drawCell(board.cells[j][i], {i, j}, d);
             }
         }
     }

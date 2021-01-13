@@ -13,7 +13,7 @@ export class IAMinMax extends IA {
         this.strategy = 'minmax';
         this.maxEvaluation = game.board.D * game.board.D + 1;
         this.minEvaluation = -this.maxEvaluation;
-        this.maxDepth = maxDepth | 3;
+        this.maxDepth = maxDepth || 3;
     }
 
     chooseMove = (player) => {
@@ -28,14 +28,13 @@ export class IAMinMax extends IA {
 
         for (let cell of possibleCells) {
             const childBoard = new Board(this._game.board.cells);
-            childBoard.placeDiskWithCell(this.playerID, cell);
+            childBoard.placeDisk(this.playerID, cell);
 
             const moveScore = this.minmax(childBoard, this.maxDepth, true);
             if (moveScore > bestMoveScore) {
                 bestMove = cell;
                 bestMoveScore = moveScore;
             }
-            this.deleteObjects(childBoard);
         }
 
         // HACK
@@ -47,27 +46,8 @@ export class IAMinMax extends IA {
         }
 
         // console.log(`Evaluated ${this.nodesEvaluated} nodes`);
-        return {i: bestMove.boardPos.x, j: bestMove.boardPos.y};
+        return bestMove;
     };
-
-    deleteObjects(board: Board) {
-        for (let j = 0; j < board.D; j++) {
-            for (let i = 0; i < board.D; i++) {
-                delete board.cells[j][i];
-            }
-        }
-        for (let j = 0; j < board.D; j++) {
-            delete board.cells[j];
-        }
-        delete board.cells;
-
-        for (let i = 0; i < board.openCells.length; i++) {
-            delete board.openCells[i];
-        }
-
-        delete board.lastPlayed;
-        delete board.lastFailed;
-    }
 
     minmax(board: Board, depth: number, maximizingPlayer: boolean) {
         this.nodesEvaluated += 1;
@@ -80,9 +60,8 @@ export class IAMinMax extends IA {
             for (let move of board.findOpenCells(this.playerID)) {
                 // copy board and place disk in the copy
                 const childBoard = new Board(board.cells);
-                childBoard.placeDiskWithCell(this.playerID, move);
+                childBoard.placeDisk(this.playerID, move);
                 const childBoardEvaluation = this.minmax(childBoard, depth - 1, !maximizingPlayer);
-                this.deleteObjects(childBoard);
                 if (childBoardEvaluation > localMaxEvaluation) {
                     localMaxEvaluation = childBoardEvaluation;
                 }
@@ -95,9 +74,8 @@ export class IAMinMax extends IA {
         for (let move of board.findOpenCells(otherPlayer)) {
             // copy board and place disk in the copy
             const childBoard = new Board(board.cells);
-            childBoard.placeDiskWithCell(otherPlayer, move);
+            childBoard.placeDisk(otherPlayer, move);
             const childBoardEvaluation = this.minmax(childBoard, depth - 1, !maximizingPlayer);
-            this.deleteObjects(childBoard);
             if (childBoardEvaluation < localMinEvaluation) {
                 localMinEvaluation = childBoardEvaluation;
             }
@@ -108,12 +86,15 @@ export class IAMinMax extends IA {
     evaluateBoard(board: Board, player: PlayerID) {
         let playerScore = 0;
         let otherPlayerScore = 0;
-        board.cells.flat().forEach((c) => {
-            if (c.value === player) {
-                playerScore++;
-            } else if (c.value !== undefined) {
-                otherPlayerScore++;
-            }
+
+        board.cells.forEach((cellLine) => {
+            cellLine.forEach((cell) => {
+                if (cell === player) {
+                    playerScore++;
+                } else if (cell !== undefined) {
+                    otherPlayerScore++;
+                }
+            });
         });
 
         return playerScore - otherPlayerScore;

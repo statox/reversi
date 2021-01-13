@@ -1,11 +1,12 @@
 import PlayerID from '../Player';
 import {Game} from '../game';
+import {BoardCoord} from '../Coord';
 
 export abstract class IA {
     playerID: PlayerID;
     readonly _game: Game;
     strategy: 'mostcells' | 'random' | 'minmax';
-    abstract chooseMove: (PlayerID) => {i: number; j: number};
+    abstract chooseMove: (PlayerID) => BoardCoord;
 
     constructor(player: PlayerID, game: Game) {
         this.playerID = player;

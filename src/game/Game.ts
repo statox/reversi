@@ -1,3 +1,4 @@
+import {BoardCoord, ScreenCoord} from '../Coord';
 import {Board} from './Board';
 import PlayerID from '../Player';
 
@@ -14,8 +15,8 @@ export class Game {
         this.isOver = false;
     }
 
-    placeDisk(coord: {i: number; j: number}) {
-        if (!coord) {
+    placeDisk(coord: BoardCoord) {
+        if (!coord || !this.board.isCoordInBoard(coord)) {
             return false;
         }
         if (this.board.placeDisk(this.currentPlayer, coord)) {
@@ -54,8 +55,8 @@ export class Game {
         };
         this.board.cells.forEach((cellLine) => {
             cellLine.forEach((cell) => {
-                if (cell.value) {
-                    this.scores[cell.value] += 1;
+                if (cell) {
+                    this.scores[cell] += 1;
                 }
             });
         });
