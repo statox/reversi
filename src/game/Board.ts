@@ -89,6 +89,7 @@ export class Board {
 
     setLastPlayed(c: BoardCoord) {
         this.lastPlayed = c;
+        this.lastFailed = undefined;
     }
 
     setFailedPlay(c: BoardCoord) {
